@@ -80,4 +80,16 @@ public class Console {
         System.out.print(color);
     }
 
+    public static void print(String string, String color){
+        Console.setColor(color);
+        System.out.print(string);
+        Console.setColor(Console.RESET);
+    }
+
+    public static void println(String string, String color){
+        Console.setColor(color);
+        System.out.println(string);
+        Console.setColor(Console.RESET);
+    }
+
 }

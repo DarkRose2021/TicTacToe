@@ -9,46 +9,52 @@ public class Game {
     private ArrayList<Player> players = new ArrayList<>();
     private int turn;
 
-    public Game(int columns, int rows, int winLength){
+    public Game(int columns, int rows, int winLength) {
         gameBoard = new GameBoard(columns, rows);
         this.winLength = winLength;
     }
 
-    public void run(){
+    public void run() {
+        //show player
+        //show menu selection
+        //switch on selection
         //add players
-        players.add(new Player("Cynthia", 'X'));
-        players.add(new Player("John", 'O'));
+        players.add(new HumanPlayer("Cynthia", 'X'));
+        players.add(new HumanPlayer("John", 'O'));
 
-        //reset game
-        turn = 0;
-        gameBoard.reset();
+        //app loop
+        //game loop
+        boolean quit = false;
+        while (!quit) {
 
-        //start game
-        boolean gameOver = false;
-        while (!gameOver){
-            Player player = players.get(turn);
-            gameBoard.print();
+            //reset game
+            turn = 0;
+            gameBoard.reset();
 
-            boolean open = false;
-            while (!open){
-                int column = Console.getInteger(player.getName() + " enter column placement: ", 1, gameBoard.getColumnSize());
-                int row = Console.getInteger(player.getName() + " enter rows placement: ", 1, gameBoard.getRowSize());
-                if(gameBoard.getGrid(column, row) == ' '){
-                    open = true;
-                    gameBoard.setGrid(column, row, player.getSymbol());
-                }else{
-                    Console.setColor(Console.RED_BACKGROUND);
-                    Console.setColor(Console.BLACK);
-                    System.out.println("Location is not open. Please enter a new location");
-                    Console.setColor(Console.RESET);
-                    System.out.println();
-                    gameBoard.print();
+            //start game
+            Player winner = null;
+            boolean gameOver = false;
+            while (!gameOver) {
+                Player player = players.get(turn);
+                gameBoard.print();
+                player.takeTurn(gameBoard);
+                if (gameBoard.checkWin(player.getSymbol(), winLength)) {
+                    gameOver = true;
+                    winner = player;
                 }
+                if (++turn == players.size()) turn = 0;
+
+            }
+            //display winner or CAT game
+            gameBoard.print();
+            if (winner != null) {
+                Console.println(winner.getName() + " is the winner!", Console.CYAN);
+            }else {
+                Console.println("CATS's game!", Console.RED);
             }
 
-            turn++;
-            if(turn == players.size())turn = 0;
-
+           String playAgain = Console.getString("Play again? [y/n]: ");
+            if(playAgain.equalsIgnoreCase("n"))quit = true;
         }
     }
 }

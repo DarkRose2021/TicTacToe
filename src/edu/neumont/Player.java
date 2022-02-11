@@ -1,6 +1,6 @@
 package edu.neumont;
 
-public class Player {
+public abstract class Player {
     private String name;
     private char symbol;
 
@@ -16,4 +16,6 @@ public class Player {
     public char getSymbol() {
         return symbol;
     }
+
+    public abstract void takeTurn(GameBoard gameBoard);
 }
